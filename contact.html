@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-title="nav.contact">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HAMRA · Rug House</title>
+<meta name="description" content="HAMRA is a rug house: 360 hand-woven designs in wool, silk and cotton, woven to your size and colours. Watch any rug being knotted, brush its pile, place it in a room.">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#120e0b">
+<meta property="og:title" content="HAMRA · Rug House"><meta property="og:description" content="360 hand-woven rug designs. Watch any rug being knotted, brush its pile, design your own."><meta property="og:type" content="website"><meta property="og:image" content="https://housinasaad-creator.github.io/hamra-rugs/assets/og.jpg">
+<link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&family=Reem+Kufi:wght@400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+
+</head>
+<body class="light">
+<main class="wrap contact">
+  <div>
+    <span class="k" data-i18n="ct.k"></span><h1 data-i18n="ct.h"></h1><p data-i18n="ct.p" style="color:var(--ink2);font-size:clamp(16px,1.4vw,19px);max-width:52ch"></p>
+    <div id="designBox"></div>
+    <div style="margin-top:34px"><div class="k" style="margin-bottom:14px" data-i18n="ct.picked"></div><div class="picked" id="picked"></div></div>
+    <div class="info"><div><b data-i18n="ct.showroom"></b><span data-i18n="ct.showroom.v"></span></div><div><b data-i18n="ct.reply"></b><span data-i18n="ct.reply.v"></span></div><div><b data-i18n="ct.ship"></b><span data-i18n="ct.ship.v"></span></div></div>
+  </div>
+  <div>
+    <form class="fm" id="fm" novalidate>
+      <label><span data-i18n="ct.name"></span><input id="fn" name="name" autocomplete="name" required></label>
+      <label><span data-i18n="ct.phone"></span><input id="fp" name="phone" type="tel" autocomplete="tel" inputmode="tel" required></label>
+      <div class="two"><label><span data-i18n="ct.city"></span><input id="fc" name="city" autocomplete="address-level2"></label><label><span data-i18n="ct.size"></span><input id="fs" name="size" inputmode="decimal" placeholder="4 × 5"></label></div>
+      <label><span data-i18n="ct.msg"></span><textarea id="fm2" name="message"></textarea></label>
+      <div class="acts"><button type="submit" class="btn" id="bGo" data-i18n="ct.send"></button><button type="button" class="btn line" id="bCp" data-i18n="ct.copy"></button></div>
+    </form>
+    <div class="out" id="out" hidden><b data-i18n="ct.ready"></b><pre id="outTxt"></pre></div>
+  </div>
+</main>
+<section class="wrap faq" style="max-width:900px;padding-bottom:110px"><h2 data-i18n="q.h" style="font-size:clamp(30px,4vw,54px);margin-bottom:26px"></h2><details><summary data-i18n="q1"></summary><p data-i18n="a.q1"></p></details><details><summary data-i18n="q2"></summary><p data-i18n="a.q2"></p></details><details><summary data-i18n="q3"></summary><p data-i18n="a.q3"></p></details><details><summary data-i18n="q4"></summary><p data-i18n="a.q4"></p></details></section>
+<script type="module" src="js/contact.js"></script>
+</body>
+</html>

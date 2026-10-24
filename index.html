@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-title="brand.sub">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HAMRA · Rug House</title>
+<meta name="description" content="HAMRA is a rug house: 360 hand-woven designs in wool, silk and cotton, woven to your size and colours. Watch any rug being knotted, brush its pile, place it in a room.">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#120e0b">
+<meta property="og:title" content="HAMRA · Rug House"><meta property="og:description" content="360 hand-woven rug designs. Watch any rug being knotted, brush its pile, design your own."><meta property="og:type" content="website"><meta property="og:image" content="https://housinasaad-creator.github.io/hamra-rugs/assets/og.jpg">
+<link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&family=Reem+Kufi:wght@400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">{"imports":{"three":"./js/vendor/three.module.min.js"}}</script>
+</head>
+<body>
+<section class="hero" id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-poster hero-bg" id="heroPoster" style="background:radial-gradient(90% 80% at 70% 45%,#3a2518,#0e0a07 70%)"></div>
+  <div class="wrap hero-in">
+    <div class="k" data-i18n="hero.k"></div>
+    <h1 data-i18n="hero.h1"></h1>
+    <p class="lead" data-i18n="hero.lead"></p>
+    <div class="acts"><a class="btn" id="cta1" href="collection.html" data-i18n="cta.explore"></a><a class="btn line" id="cta2" href="studio.html" data-i18n="cta.design"></a></div>
+  </div>
+  <div class="hero-meta"><span class="hint" data-i18n="hero.hint"></span><div class="prog"><i id="hprog"></i></div><span data-i18n="hero.loom"></span></div>
+</section>
+
+<section class="sec sand" id="weave">
+  <div class="wrap weave-grid">
+    <div class="loomwrap" data-rv>
+      <div class="loomframe"><div id="loomHost"></div></div>
+      <div class="loom-ui"><button type="button" class="btn sm" id="wPlay" data-i18n="w.play"></button><button type="button" class="btn line sm" id="wFast" data-i18n="w.fast"></button><a class="btn line sm" id="wOpen" href="collection.html" data-i18n="w.open"></a></div>
+    </div>
+    <div class="weave-copy" data-rv>
+      <span class="k" data-i18n="w.k"></span><h2 data-i18n="w.h" style="font-size:clamp(34px,4.6vw,66px);margin-top:18px"></h2><p data-i18n="w.p" style="margin-top:20px;color:var(--ink2)"></p>
+      <div class="picks" id="picks"></div>
+      <div class="stats"><div><b>360</b><span data-i18n="w.s1"></span></div><div><b>5</b><span data-i18n="w.s2"></span></div><div><b>4</b><span data-i18n="w.s3"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sh" data-rv><span class="k" data-i18n="c.k"></span><h2 data-i18n="c.h"></h2></div>
+    <div class="cols" id="cols"></div>
+  </div>
+</section>
+
+<section class="sec dark" id="touch">
+  <div class="wrap weave-grid">
+    <div data-rv><span class="k" data-i18n="b.k"></span><h2 data-i18n="b.h" style="font-size:clamp(34px,4.6vw,66px);margin-top:18px"></h2><p data-i18n="b.p" style="margin-top:20px;color:rgba(243,233,214,.76);max-width:50ch"></p><div class="loom-ui" style="margin-top:28px"><button type="button" class="btn gold sm" id="tBrush"></button><button type="button" class="btn line sm" id="tNext"></button></div></div>
+    <div data-rv><div class="brush-wrap" id="tWrap" style="max-width:520px;margin-inline:auto"><canvas id="tRug"></canvas><div class="brush-tip" id="tTip" data-i18n="b.tip"></div></div></div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sh" data-rv><h2 data-i18n="f.h"></h2></div>
+    <div class="feat" data-rv><div><i>01</i><h3 data-i18n="f1.h"></h3><p data-i18n="f1.p"></p></div><div><i>02</i><h3 data-i18n="f2.h"></h3><p data-i18n="f2.p"></p></div><div><i>03</i><h3 data-i18n="f3.h"></h3><p data-i18n="f3.p"></p></div></div>
+  </div>
+</section>
+
+<section class="sec sand">
+  <div class="wrap weave-grid">
+    <div data-rv><span class="k" data-i18n="s.k"></span><h2 data-i18n="s.h" style="font-size:clamp(34px,4.6vw,66px);margin-top:18px"></h2><p data-i18n="s.p" style="margin-top:20px;color:var(--ink2);max-width:52ch"></p><div class="loom-ui" style="margin-top:28px"><a class="btn" href="studio.html" data-i18n="cta.design"></a><a class="btn line" href="collection.html" data-i18n="cta.all"></a></div></div>
+    <div data-rv><div id="mini" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"></div></div>
+  </div>
+</section>
+
+<script type="module" src="js/home.js"></script>
+</body>
+</html>
