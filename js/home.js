@@ -1,29 +1,33 @@
-/* HAMRA — home: live 3D loom hero (2D fallback), the weaving studio, collections, touch the pile, design teaser */
+/* HAMRA — home: hero loop video, the weaving studio, collections, touch the pile, story teaser */
 import { $, $$, esc, t, tl, href, mountChrome, lang, reduced } from './shared.js';
-import { catalog, paintRug, makeSpec, renderRug } from './rugkit.js';
+import { catalog, paintRug, makeSpec } from './rugkit.js';
 import { createLoom } from './weave.js';
 import { enableBrush } from './brush.js';
 mountChrome('home');
 const cat = catalog(), P = new URLSearchParams(location.search), phone = matchMedia('(max-width: 760px)').matches;
 
-/* ---------------- hero */
-const hero = $('#hero'), bg = $('#heroBg'); let scene = null, hero2d = null, heroDead = false;
+/* ---------------- hero: a looping video of the 3D loom (the live scene stays available with ?hero=3d) */
+const hero = $('#hero'), bg = $('#heroBg'), video = $('#heroVideo'); let scene = null, hero2d = null, heroDead = false;
 function blank(cv) { try { const s = document.createElement('canvas'); s.width = 16; s.height = 9; const c = s.getContext('2d'); c.drawImage(cv, 0, 0, 16, 9); const d = c.getImageData(0, 0, 16, 9).data; let m = 0; for (let i = 0; i < d.length; i += 4) m += d[i] + d[i + 1] + d[i + 2]; return m / (d.length / 4 * 3) < 3; } catch (e) { return false; } }
 function fallback2D() {
   if (scene) { try { scene.dispose(); } catch (e) { } scene = null; } if (hero2d) return;
   const host = document.createElement('div'); host.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding:0 clamp(24px,8vw,140px);z-index:1'; const box = document.createElement('div'); box.style.cssText = 'width:min(34vw,420px);min-width:230px'; host.append(box); bg.append(host);
-  hero2d = createLoom(box, makeSpec(7, { family: 'medallion', palette: 0 }), { duration: 15, autoplay: true, width: 560, onProgress: (p) => { $('#hprog').style.width = p * 100 + '%'; }, onDone: () => setTimeout(() => hero2d.restart(), 1800) }); hero.classList.add('ready');
+  hero2d = createLoom(box, makeSpec(7, { family: 'medallion', palette: 0 }), { duration: 15, autoplay: true, width: 560, onDone: () => setTimeout(() => hero2d.restart(), 1800) }); hero.classList.add('ready');
 }
-async function startHero() {
-  const hp = P.get('hero'); if (hp === 'off' || reduced) { return; } if (hp === '2d') return fallback2D();
-  const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })(); if (!gl) return fallback2D();
+async function start3D() {
+  video.remove(); const gl = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch (e) { return false; } })(); if (!gl) return fallback2D();
   try {
     const m = await import('./loom3d.js'); if (heroDead) return;
-    scene = m.createLoomScene(bg, { quality: phone ? 'lite' : 'high', onReady: () => { hero.classList.add('ready'); setTimeout(() => { if (scene && blank(scene.renderer.domElement)) fallback2D(); }, 1600); }, onProgress: (p) => { $('#hprog').style.width = p * 100 + '%'; } }); scene.start();
+    scene = m.createLoomScene(bg, { quality: phone ? 'lite' : 'high', onReady: () => { hero.classList.add('ready'); setTimeout(() => { if (scene && blank(scene.renderer.domElement)) fallback2D(); }, 1600); } }); scene.start();
   } catch (e) { console.warn('hero 3d unavailable', e); fallback2D(); }
 }
-if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { if (scene) e.isIntersecting ? scene.start() : scene.stop(); if (hero2d) e.isIntersecting ? hero2d.play() : hero2d.pause(); }, { rootMargin: '60px' }).observe(hero);
-document.readyState === 'complete' ? startHero() : addEventListener('load', startHero, { once: true });
+async function startVideo() {
+  const { initHeroVideo } = await import('./hero-video.js');
+  const hv = initHeroVideo({ hero, stick: hero, video, reduced, saveData: !!(navigator.connection && navigator.connection.saveData), stops: 1, clips: 'assets/hero/', onReady: () => hero.classList.add('ready') });
+  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => (e.isIntersecting ? hv.load() : hv.unload()), { rootMargin: '150% 0px' }).observe(hero); else hv.load();
+}
+if (P.get('hero') === '3d') { if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => { if (scene) e.isIntersecting ? scene.start() : scene.stop(); if (hero2d) e.isIntersecting ? hero2d.play() : hero2d.pause(); }, { rootMargin: '60px' }).observe(hero); document.readyState === 'complete' ? start3D() : addEventListener('load', start3D, { once: true }); }
+else if (P.get('hero') !== 'off') { document.readyState === 'complete' ? startVideo() : addEventListener('load', startVideo, { once: true }); }
 
 /* ---------------- weaving studio on the page */
 const pickIds = []; for (const f of ['medallion', 'garden', 'deco', 'kilim', 'abstract', 'oushak']) { const x = cat.find((c) => c.fam === f && c.shape === 'rect' && !pickIds.includes(c.id)); if (x) pickIds.push(x.id); }
@@ -51,6 +55,6 @@ $('#tBrush').addEventListener('click', () => { const on = !tb.on; tb.set(on); $(
 $('#tNext').addEventListener('click', () => { const pool = cat.filter((c) => c.shape === 'rect' && c.pile !== 'low'); tI = pool[Math.floor(Math.random() * pool.length)].id; tPaint(); });
 addEventListener('langchange', () => { $('#tBrush').textContent = t('r.brush'); $('#tNext').textContent = t('st.shuffle'); });
 
-/* ---------------- design teaser */
-function mini() { const f = ['medallion', 'garden', 'deco', 'abstract', 'trellis', 'oushak', 'kilim', 'allover']; $('#mini').innerHTML = [0, 1, 2].map(() => `<a href="${href('studio.html')}" style="display:block;transition:transform .5s var(--ease)" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform=''"><canvas style="width:100%;filter:drop-shadow(0 18px 20px rgba(0,0,0,.28))"></canvas></a>`).join(''); $$('#mini canvas').forEach((cv) => { paintRug(cv, makeSpec(Math.floor(Math.random() * 100000) + 1000, { family: f[Math.floor(Math.random() * f.length)], shape: 'rect' }), 4); }); }
-mini();
+/* ---------------- story teaser: three rugs from the collection */
+$('#mini').innerHTML = ['medallion', 'garden', 'kilim'].map((f) => { const it = cat.find((c) => c.fam === f && c.shape === 'rect'); return `<a href="${href('rug.html?id=' + it.id)}" aria-label="${esc(it.name)}" style="display:block;transition:transform .5s var(--ease)" onmouseover="this.style.transform='translateY(-8px)'" onmouseout="this.style.transform=''"><canvas data-id="${it.id}" style="width:100%;filter:drop-shadow(0 18px 20px rgba(0,0,0,.28))"></canvas></a>`; }).join('');
+$$('#mini canvas').forEach((cv) => paintRug(cv, cat[+cv.dataset.id - 1].spec, 4));

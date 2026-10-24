@@ -43,7 +43,7 @@ export function logoSVG(size = 34) { let r = ''; for (let y = 0; y < 17; y++) { 
 const HEART = '<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.3-9.2C1.2 8 3.6 4.5 7.2 4.5c2 0 3.6 1 4.8 2.7 1.2-1.7 2.8-2.7 4.8-2.7 3.6 0 6 3.5 4.5 7.3C19.5 16.4 12 21 12 21z"/></svg>';
 export { HEART };
 export function mountChrome(active) {
-  const nav = [['collection', 'collection.html'], ['atelier', 'atelier.html'], ['studio', 'studio.html'], ['contact', 'contact.html']];
+  const nav = [['collection', 'collection.html'], ['atelier', 'atelier.html'], ['about', 'about.html'], ['contact', 'contact.html']];
   const links = nav.map(([k, p]) => `<a href="${href(p)}" data-i18n="nav.${k}" class="${active === k ? 'on' : ''}"></a>`).join('');
   document.body.insertAdjacentHTML('afterbegin', `<header class="hdr" id="hdr"><div class="wrap"><a class="brand" href="${href('index.html')}" aria-label="HAMRA">${logoSVG()}<span><b>HAMRA</b><small data-i18n="brand.sub"></small></span></a>
     <nav class="nav">${links}</nav>
@@ -53,7 +53,7 @@ export function mountChrome(active) {
     <nav class="mnav" id="mnav">${links}</nav>`);
   document.body.insertAdjacentHTML('beforeend', `<footer class="ft"><div class="wrap"><div><div class="big" data-i18n="ft.big"></div><p data-i18n="ft.about" style="max-width:46ch;opacity:.8"></p></div>
     <div><h4 data-i18n="ft.explore"></h4>${nav.map(([k, p]) => `<a href="${href(p)}" data-i18n="nav.${k}"></a>`).join('')}</div>
-    <div><h4 data-i18n="ft.house"></h4><a href="${href('atelier.html')}" data-i18n="a.k"></a><a href="${href('studio.html')}" data-i18n="s.k"></a><span style="opacity:.7;font-size:14px;display:block;padding-top:8px" data-i18n="ft.hours"></span></div>
+    <div><h4 data-i18n="ft.house"></h4><a href="${href('atelier.html')}" data-i18n="a.k"></a><a href="${href('about.html')}" data-i18n="nav.about"></a><span style="opacity:.7;font-size:14px;display:block;padding-top:8px" data-i18n="ft.hours"></span></div>
     <div><h4>HAMRA</h4>${['anatolia', 'caravan', 'nomad', 'atelier'].map((c) => `<a href="${href('collection.html?coll=' + c)}" data-i18n="col.${c}"></a>`).join('')}</div>
     <small data-i18n="ft.rights"></small></div></footer>
     <div class="scrim" id="scrim"></div><aside class="drawer" id="drawer" aria-label="My selection"><header><h3 data-i18n="sel.title"></h3><button type="button" id="selClose" aria-label="Close" style="font-size:30px;line-height:1">×</button></header><div class="list" id="dlist"></div><footer id="dfoot"></footer></aside>`);

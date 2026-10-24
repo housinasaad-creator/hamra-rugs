@@ -89,7 +89,7 @@ export function createLoomScene(host, o = {}) {
   dust.frustumCulled = false; scene.add(dust);
 
   /* ---- camera path */
-  const keys = [[0.0, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]], [0.08, [0.9, -1.0, 5.2], [0.0, -1.5, 0]], [0.16, [0.8, -1.25, 2.9], [0.1, -1.5, 0]], [0.35, [2.9, -0.4, 6.3], [-0.5, -0.3, 0]], [0.58, [-2.5, 0.9, 8.6], [-1.0, 0.5, 0]], [0.82, [1.3, 0.8, 9.8], [-1.2, 0.3, 0]], [0.94, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]], [1.0, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]]];
+  const keys = [[0.0, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]], [0.06, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]], [0.13, [0.9, -1.0, 5.2], [0.0, -1.5, 0]], [0.2, [0.8, -1.25, 2.9], [0.1, -1.5, 0]], [0.37, [2.9, -0.4, 6.3], [-0.5, -0.3, 0]], [0.6, [-2.5, 0.9, 8.6], [-1.0, 0.5, 0]], [0.8, [1.3, 0.8, 9.8], [-1.2, 0.3, 0]], [0.92, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]], [1.0, [0.0, 0.4, 10.2], [-1.4, 0.1, 0]]];   /* starts and ends on the same wide shot (the loop video dissolves finished rug → empty loom there) */
   const cpos = new THREE.CatmullRomCurve3(keys.map((k) => new THREE.Vector3(...k[1])), false, 'centripetal'), ctar = new THREE.CatmullRomCurve3(keys.map((k) => new THREE.Vector3(...k[2])), false, 'centripetal'), kt = keys.map((k) => k[0]);
   const at = (curve, p) => { let i = 0; while (i < kt.length - 2 && p > kt[i + 1]) i++; const u = clamp((p - kt[i]) / (kt[i + 1] - kt[i]), 0, 1), s = u * u * (3 - 2 * u); return curve.getPoint((i + s) / (kt.length - 1)); };
   let mx = 0, my = 0, smx = 0, smy = 0, portrait = false, raf = 0, running = false, t0 = performance.now(), ready = false;

@@ -4,25 +4,26 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HAMRA · Rug House</title>
 <meta name="description" content="HAMRA is a rug house: 360 hand-woven designs in wool, silk and cotton, woven to your size and colours. Watch any rug being knotted, brush its pile, place it in a room.">
-<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#120e0b">
-<meta property="og:title" content="HAMRA · Rug House"><meta property="og:description" content="360 hand-woven rug designs. Watch any rug being knotted, brush its pile, design your own."><meta property="og:type" content="website"><meta property="og:image" content="https://housinasaad-creator.github.io/hamra-rugs/assets/og.jpg">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#120e0b"><meta name="color-scheme" content="only light"><meta name="supported-color-schemes" content="light"><meta name="darkreader-lock">
+<meta property="og:title" content="HAMRA · Rug House"><meta property="og:description" content="360 hand-woven rug designs. Watch any rug being knotted, brush its pile, see it in a room."><meta property="og:type" content="website"><meta property="og:image" content="https://housinasaad-creator.github.io/hamra-rugs/assets/og.jpg">
 <link rel="icon" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Jost:wght@300;400;500;600&family=Reem+Kufi:wght@400;500;600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css">
 <script type="importmap">{"imports":{"three":"./js/vendor/three.module.min.js"}}</script>
+<link rel="preload" as="image" href="assets/hero/poster.webp" media="(min-width: 761px)"><link rel="preload" as="image" href="assets/hero/poster-m.webp" media="(max-width: 760px)">
 </head>
 <body>
 <section class="hero" id="hero">
-  <div class="hero-bg" id="heroBg"></div>
-  <div class="hero-poster hero-bg" id="heroPoster" style="background:radial-gradient(90% 80% at 70% 45%,#3a2518,#0e0a07 70%)"></div>
+  <div class="hero-bg" id="heroBg"><video id="heroVideo" muted loop playsinline preload="none" aria-hidden="true"></video></div>
+  <div class="hero-poster hero-bg" id="heroPoster"></div>
   <div class="wrap hero-in">
     <div class="k" data-i18n="hero.k"></div>
     <h1 data-i18n="hero.h1"></h1>
     <p class="lead" data-i18n="hero.lead"></p>
-    <div class="acts"><a class="btn" id="cta1" href="collection.html" data-i18n="cta.explore"></a><a class="btn line" id="cta2" href="studio.html" data-i18n="cta.design"></a></div>
+    <div class="acts"><a class="btn" id="cta1" href="collection.html" data-i18n="cta.explore"></a><a class="btn line" id="cta2" href="about.html" data-i18n="cta.story"></a></div>
   </div>
-  <div class="hero-meta"><span class="hint" data-i18n="hero.hint"></span><div class="prog"><i id="hprog"></i></div><span data-i18n="hero.loom"></span></div>
+  <div class="hero-meta"><span class="hint" data-i18n="hero.hint"></span><span data-i18n="hero.loom"></span></div>
 </section>
 
 <section class="sec sand" id="weave">
@@ -62,7 +63,7 @@
 
 <section class="sec sand">
   <div class="wrap weave-grid">
-    <div data-rv><span class="k" data-i18n="s.k"></span><h2 data-i18n="s.h" style="font-size:clamp(34px,4.6vw,66px);margin-top:18px"></h2><p data-i18n="s.p" style="margin-top:20px;color:var(--ink2);max-width:52ch"></p><div class="loom-ui" style="margin-top:28px"><a class="btn" href="studio.html" data-i18n="cta.design"></a><a class="btn line" href="collection.html" data-i18n="cta.all"></a></div></div>
+    <div data-rv><span class="k" data-i18n="s.k"></span><h2 data-i18n="s.h" style="font-size:clamp(34px,4.6vw,66px);margin-top:18px"></h2><p data-i18n="s.p" style="margin-top:20px;color:var(--ink2);max-width:52ch"></p><div class="loom-ui" style="margin-top:28px"><a class="btn" href="about.html" data-i18n="cta.story"></a><a class="btn line" href="collection.html" data-i18n="cta.all"></a></div></div>
     <div data-rv><div id="mini" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px"></div></div>
   </div>
 </section>

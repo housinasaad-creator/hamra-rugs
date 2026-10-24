@@ -1,31 +1,34 @@
 /* HAMRA — the catalog: 360 designs, filters, sort, search, quick view, selection */
 import { $, $$, esc, t, tl, href, mountChrome, sel, HEART, waUrl, waText, lang } from './shared.js';
-import { catalog, paintRug, PALETTES, FAMILIES, COLOR_FAMILIES, SHAPES, MATERIALS, TECHNIQUES, PILES, ROOMS, CATALOG_SIZE } from './rugkit.js';
+import { catalog, paintRug, PALETTES, SHAPES } from './rugkit.js';
 mountChrome('collection');
-const cat = catalog(), PER = 36, GROUPS = [['style', 'fam', FAMILIES, 'fam'], ['color', 'color', COLOR_FAMILIES, 'color'], ['size', 'size', ['s', 'm', 'l'], 'sz'], ['shape', 'shape', SHAPES, 'shape'], ['mat', 'mat', MATERIALS, 'mat'], ['tech', 'tech', TECHNIQUES, 'tech'], ['pile', 'pile', PILES, 'pile'], ['room', 'room', ROOMS, 'room'], ['coll', 'col', ['anatolia', 'caravan', 'nomad', 'atelier', 'heritage', 'horizon', 'garden', 'kilim'], 'col']];
-const SW = { red: '#9c1f24', blue: '#25407d', green: '#2a6b4f', gold: '#d6a53e', neutral: '#e4d7bd', grey: '#8a8f95', pink: '#d79aa0', brown: '#8a5a3c', black: '#1c1c20', purple: '#5e3a68', multi: 'conic-gradient(#b4452b,#d6a53e,#2a6b4f,#25407d,#b4452b)' };
+/* four simple filters (style, colour, size, shape); the 13 pattern families and 11 colour families are folded into a handful of groups, and the collection comes from the home page tiles */
+const STYLE_OF = { medallion: 'classic', oushak: 'classic', garden: 'garden', allover: 'garden', trellis: 'garden', kilim: 'tribal', gul: 'tribal', patchwork: 'tribal', geometric: 'geometric', stripes: 'geometric', deco: 'geometric', abstract: 'modern', shag: 'modern' };
+const COLOR_OF = { red: 'red', blue: 'blue', green: 'green', gold: 'gold', brown: 'gold', neutral: 'neutral', grey: 'grey', black: 'grey', pink: 'pink', purple: 'pink', multi: 'multi' };
+const cat = catalog(), PER = 36, GROUPS = [['style', 'style', ['classic', 'garden', 'tribal', 'geometric', 'modern'], 'sg'], ['color', 'color', ['red', 'blue', 'green', 'gold', 'neutral', 'grey', 'pink', 'multi'], 'cg'], ['size', 'size', ['s', 'm', 'l'], 'sz'], ['shape', 'shape', SHAPES, 'shape'], ['coll', 'col', ['anatolia', 'caravan', 'nomad', 'atelier', 'heritage', 'horizon', 'garden', 'kilim'], 'col']], SIDE = GROUPS.filter((g) => g[0] !== 'coll');
+const SW = { red: '#9c1f24', blue: '#25407d', green: '#2a6b4f', gold: '#d6a53e', neutral: '#e4d7bd', grey: '#8a8f95', pink: '#d79aa0', multi: 'conic-gradient(#b4452b,#d6a53e,#2a6b4f,#25407d,#b4452b)' };
 const sizeClass = (it) => { const s = new Set(); for (const z of it.sizes) { const [a, b] = z.split('x').map(Number), area = b ? a * b : Math.PI * a * a / 4 * 1.27; s.add(area <= 21600 ? 's' : area <= 40000 ? 'm' : 'l'); } return s; };
 cat.forEach((it) => { it.sc = sizeClass(it); });
-const ATTR = { fam: (it) => [it.fam], color: (it) => [it.color], size: (it) => [...it.sc], shape: (it) => [it.shape], mat: (it) => [it.mat], tech: (it) => [it.tech], pile: (it) => [it.pile], room: (it) => it.rooms, col: (it) => [it.col] };
+const ATTR = { style: (it) => [STYLE_OF[it.fam]], color: (it) => [COLOR_OF[it.color]], size: (it) => [...it.sc], shape: (it) => [it.shape], col: (it) => [it.col] };
 const state = { q: '', sort: 'new', page: 1, cols: 3, f: Object.fromEntries(GROUPS.map((g) => [g[0], new Set()])), seed: 1 };
-function readURL() { const u = new URLSearchParams(location.search); for (const [k] of GROUPS) { const v = u.get(k); if (v) v.split(',').forEach((x) => state.f[k].add(x)); } if (u.get('q')) state.q = u.get('q'); if (u.get('sort')) state.sort = u.get('sort'); if (u.get('coll')) state.f.coll.add(u.get('coll')); if (u.get('style')) u.get('style').split(',').forEach((x) => state.f.style.add(x)); }
+function readURL() { const u = new URLSearchParams(location.search); for (const [k] of GROUPS) { const v = u.get(k); if (v) v.split(',').forEach((x) => state.f[k].add(x)); } if (u.get('q')) state.q = u.get('q'); if (u.get('sort')) state.sort = u.get('sort'); if (u.get('coll')) state.f.coll.add(u.get('coll')); }
 function writeURL() { const u = new URLSearchParams(location.search); for (const [k] of GROUPS) { u.delete(k); if (state.f[k].size) u.set(k, [...state.f[k]].join(',')); } u.delete('coll'); if (state.q) u.set('q', state.q); else u.delete('q'); if (state.sort !== 'new') u.set('sort', state.sort); else u.delete('sort'); const s = u.toString(); history.replaceState(null, '', location.pathname + (s ? '?' + s : '')); }
 function matches(it) { for (const [k, , , ] of GROUPS) { const sset = state.f[k]; if (!sset.size) continue; const a = ATTR[GROUPS.find((g) => g[0] === k)[1]](it); if (!a.some((v) => sset.has(v))) return false; } if (state.q) { const q = state.q.toLowerCase(); if (!(it.name.toLowerCase().includes(q) || it.code.toLowerCase().includes(q) || tl('fam.' + it.fam).toLowerCase().includes(q) || tl('color.' + it.color).toLowerCase().includes(q))) return false; } return true; }
-function result() { let r = cat.filter(matches); const s = state.sort; if (s === 'name') r.sort((a, b) => a.name.localeCompare(b.name) || a.id - b.id); else if (s === 'density') r.sort((a, b) => (b.density || 0) - (a.density || 0) || a.id - b.id); else if (s === 'shuffle') { const x = state.seed; r.sort((a, b) => ((a.id * 9301 + x * 49297) % 233280) - ((b.id * 9301 + x * 49297) % 233280)); } else r.sort((a, b) => b.added - a.added); return r; }
+function result() { let r = cat.filter(matches); const s = state.sort; if (s === 'name') r.sort((a, b) => a.name.localeCompare(b.name) || a.id - b.id); else if (s === 'shuffle') { const x = state.seed; r.sort((a, b) => ((a.id * 9301 + x * 49297) % 233280) - ((b.id * 9301 + x * 49297) % 233280)); } else r.sort((a, b) => b.added - a.added); return r; }
 
 /* ---------------- sidebar */
 function buildSide() {
   const side = $('#side'); let h = `<button type="button" class="btn line sm" id="reset" style="margin-bottom:18px">${esc(t('shop.reset'))}</button>`;
-  for (const [k, , vals, ns] of GROUPS) {
-    h += `<h4>${esc(t('f.' + (k === 'mat' ? 'mat' : k)))}</h4>`;
-    if (k === 'color') h += `<div class="sw">${vals.map((v) => `<button type="button" data-g="color" data-v="${v}" title="${esc(tl('color.' + v))}" aria-label="${esc(tl('color.' + v))}" class="${state.f.color.has(v) ? 'on' : ''}" style="background:${SW[v]}"></button>`).join('')}</div>`;
+  for (const [k, , vals, ns] of SIDE) {
+    h += `<h4>${esc(t('f.' + k))}</h4>`;
+    if (k === 'color') h += `<div class="sw">${vals.map((v) => `<button type="button" data-g="color" data-v="${v}" title="${esc(tl('cg.' + v))}" aria-label="${esc(tl('cg.' + v))}" class="${state.f.color.has(v) ? 'on' : ''}" style="background:${SW[v]}"></button>`).join('')}</div>`;
     else h += `<div class="chips">${vals.map((v) => `<button type="button" class="chip ${state.f[k].has(v) ? 'on' : ''}" data-g="${k}" data-v="${v}">${esc(tl(k === 'size' ? 'sz.' + v : ns + '.' + v))}</button>`).join('')}</div>`;
   }
   side.innerHTML = h;
   $$('[data-g]', side).forEach((b) => b.addEventListener('click', () => { const s = state.f[b.dataset.g]; s.has(b.dataset.v) ? s.delete(b.dataset.v) : s.add(b.dataset.v); b.classList.toggle('on'); state.page = 1; refresh(); }));
   $('#reset').addEventListener('click', () => { for (const k in state.f) state.f[k].clear(); state.q = ''; $('#q').value = ''; state.page = 1; buildSide(); refresh(); });
 }
-function buildSort() { const s = $('#sort'); s.innerHTML = ['new', 'name', 'density', 'shuffle'].map((k) => `<option value="${k}" ${state.sort === k ? 'selected' : ''}>${esc(t('sort.' + k))}</option>`).join(''); }
+function buildSort() { const s = $('#sort'); s.innerHTML = ['new', 'name', 'shuffle'].map((k) => `<option value="${k}" ${state.sort === k ? 'selected' : ''}>${esc(t('sort.' + k))}</option>`).join(''); }
 
 /* ---------------- grid */
 const io = 'IntersectionObserver' in window ? new IntersectionObserver((en) => en.forEach((e) => { const c = e.target; if (e.isIntersecting) paintCard(c); else release(c); }), { rootMargin: '700px 0px' }) : null;
